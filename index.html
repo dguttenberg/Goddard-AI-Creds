@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCP × Goddard · AI Capabilities + Looking Ahead</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+:root {
+  --dcp-midnight:      #000531;
+  --dcp-grey:          #E6E7E8;
+  --dcp-violet:        #545DFF;
+  --dcp-green:         #20FE8F;
+  --dcp-sky:           #76BEFF;
+  --dcp-ember:         #FF8371;
+  --dcp-amber:         #F5C842;
+  --dcp-red:           #E24A3C;
+  --dcp-white:         #FFFFFF;
+
+  --dcp-green-a15:     rgba(32,254,143,0.15);
+  --dcp-green-a30:     rgba(32,254,143,0.30);
+  --dcp-green-a06:     rgba(32,254,143,0.06);
+  --dcp-violet-a20:    rgba(84,93,255,0.20);
+  --dcp-violet-a10:    rgba(84,93,255,0.10);
+  --dcp-violet-a40:    rgba(84,93,255,0.40);
+  --dcp-text-soft:     rgba(255,255,255,0.62);
+  --dcp-text-mute:     rgba(255,255,255,0.42);
+
+  --dcp-font: 'DM Sans','Helvetica Neue',Arial,sans-serif;
+}
+
+html, body {
+  width:100%; height:100%;
+  background:var(--dcp-midnight);
+  color:var(--dcp-white);
+  font-family:var(--dcp-font);
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Nav ── */
+.nav {
+  position:fixed; top:0; left:0; right:0; height:52px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 40px;
+  background:rgba(0,5,49,0.85);
+  border-bottom:1px solid var(--dcp-green-a15);
+  backdrop-filter:blur(8px);
+  z-index:100;
+}
+.nav-brand {
+  display:flex; align-items:center; gap:12px;
+  font-family:var(--dcp-font);
+  font-size:11px; font-weight:600;
+  letter-spacing:0.22em; text-transform:uppercase;
+  color:rgba(255,255,255,0.55);
+}
+.nav-brand .mark {
+  font-size:14px; font-weight:700;
+  color:var(--dcp-green);
+  letter-spacing:-0.02em;
+}
+.nav-brand .sep {
+  display:inline-block; width:14px; height:1px;
+  background:var(--dcp-green-a30);
+}
+.nav-right { display:flex; align-items:center; gap:24px; }
+.nav-dots { display:flex; gap:6px; }
+.dot {
+  width:6px; height:6px; border-radius:50%;
+  background:rgba(255,255,255,0.18);
+  cursor:pointer; transition:all 0.2s;
+}
+.dot.on { background:var(--dcp-green); transform:scale(1.45); }
+.dot:hover { background:rgba(255,255,255,0.45); }
+.nav-hint {
+  font-family:var(--dcp-font);
+  font-size:10px; font-weight:500;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:rgba(255,255,255,0.35);
+}
+.counter {
+  position:fixed; bottom:22px; right:36px;
+  font-family:var(--dcp-font);
+  font-size:11px; font-weight:500;
+  letter-spacing:0.16em;
+  color:rgba(255,255,255,0.4);
+  z-index:100;
+}
+
+/* ── Deck framework ── */
+.deck { position:fixed; inset:0; overflow:hidden; }
+.slide {
+  position:absolute; inset:0;
+  padding:96px 80px 64px;
+  display:flex; flex-direction:column;
+  opacity:0; pointer-events:none;
+  transition:opacity 0.5s ease;
+}
+.slide.on { opacity:1; pointer-events:all; }
+.slide.fullbleed { padding:0; overflow:hidden; }
+
+.bg {
+  position:absolute; inset:0; z-index:-2;
+  background:
+    radial-gradient(ellipse at 12% 88%, rgba(84,93,255,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 88% 12%, rgba(32,254,143,0.05) 0%, transparent 50%),
+    var(--dcp-midnight);
+}
+.glow {
+  position:absolute; border-radius:50%;
+  filter:blur(130px); z-index:-1; pointer-events:none;
+}
+
+/* Common type */
+.eyebrow {
+  font-family:var(--dcp-font);
+  font-size:11px; font-weight:600;
+  letter-spacing:0.24em; text-transform:uppercase;
+  color:var(--dcp-violet);
+  display:flex; align-items:center; gap:14px;
+}
+.eyebrow.green { color:var(--dcp-green); }
+.eyebrow::before {
+  content:''; display:block;
+  width:28px; height:1px;
+  background:currentColor;
+  opacity:0.7;
+}
+.headline {
+  font-family:var(--dcp-font);
+  font-weight:700; line-height:1;
+  letter-spacing:-0.015em; text-transform:uppercase;
+  color:var(--dcp-white);
+}
+.subhead {
+  font-family:var(--dcp-font);
+  font-weight:600;
+  letter-spacing:0.04em; text-transform:uppercase;
+  color:var(--dcp-text-soft);
+}
+
+@keyframes fade-up { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+@keyframes fade-in { from{opacity:0;} to{opacity:1;} }
+
+/* ─────────────── S0: TITLE ─────────────── */
+#s0 { justify-content:center; }
+.s0-wrap { max-width:1100px; }
+.s0-eyebrow {
+  font-family:var(--dcp-font);
+  font-size:12px; font-weight:600;
+  letter-spacing:0.32em; text-transform:uppercase;
+  color:var(--dcp-green);
+  margin-bottom:48px;
+}
+.s0-rule {
+  width:60px; height:2px; background:var(--dcp-green);
+  margin-bottom:32px;
+}
+.s0-headline {
+  font-family:var(--dcp-font);
+  font-weight:700;
+  font-size:clamp(56px, 7.2vw, 104px);
+  line-height:0.96; letter-spacing:-0.025em;
+  text-transform:uppercase;
+  color:var(--dcp-white);
+  margin-bottom:42px;
+}
+.s0-subline {
+  font-family:var(--dcp-font);
+  font-size:15px; font-weight:500;
+  letter-spacing:0.06em;
+  color:var(--dcp-text-mute);
+}
+
+/* ─────────────── S1: AGENDA ─────────────── */
+.s1-wrap {
+  flex:1;
+  display:flex; flex-direction:column;
+  justify-content:center;
+  max-width:1280px;
+}
+.s1-head {
+  font-size:clamp(60px,7vw,96px);
+  margin-bottom:80px;
+}
+.s1-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:64px;
+}
+.s1-col { animation:fade-up 0.7s ease both; }
+.s1-col:nth-child(1) { animation-delay:0.05s; }
+.s1-col:nth-child(2) { animation-delay:0.18s; }
+.s1-col:nth-child(3) { animation-delay:0.31s; }
+.s1-num {
+  font-family:var(--dcp-font);
+  font-weight:700; font-size:48px;
+  letter-spacing:-0.02em;
+  color:var(--dcp-violet);
+  margin-bottom:24px; line-height:1;
+}
+.s1-title {
+  font-family:var(--dcp-font);
+  font-weight:700; font-size:24px;
+  text-transform:uppercase;
+  letter-spacing:-0.005em; line-height:1.15;
+  color:var(--dcp-white);
+  margin-bottom:18px;
+}
+.s1-body {
+  font-size:16px; font-weight:400;
+  line-height:1.6;
+  color:var(--dcp-text-soft);
+  max-width:300px;
+}
+
+/* ─────────────── S2/S3: 3-UP VIDEO CARDS ─────────────── */
+.deck-head-row {
+  display:flex; flex-direction:column; gap:14px;
+  margin-bottom:48px;
+}
+.deck-head {
+  font-size:clamp(54px,5.8vw,82px);
+  line-height:0.97;
+}
+.deck-sub {
+  font-size:13px;
+  letter-spacing:0.16em;
+  color:var(--dcp-text-mute);
+  max-width:780px;
+  line-height:1.5;
+}
+.cards-3up {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:24px;
+  flex:1;
+  align-content:start;
+}
+.cards-2up {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:32px;
+  flex:1;
+  align-content:start;
+}
+.work-card {
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--dcp-violet-a20);
+  border-top:2px solid var(--dcp-green);
+  border-radius:6px;
+  padding:24px 26px 28px;
+  display:flex; flex-direction:column;
+  animation:fade-up 0.6s ease both;
+}
+.cards-3up .work-card:nth-child(1) { animation-delay:0.05s; }
+.cards-3up .work-card:nth-child(2) { animation-delay:0.16s; }
+.cards-3up .work-card:nth-child(3) { animation-delay:0.27s; }
+.cards-2up .work-card:nth-child(1) { animation-delay:0.05s; }
+.cards-2up .work-card:nth-child(2) { animation-delay:0.16s; }
+.work-card-eyebrow {
+  font-family:var(--dcp-font);
+  font-size:11px; font-weight:600;
+  letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--dcp-violet);
+  margin-bottom:10px;
+}
+.work-card-stat {
+  font-family:var(--dcp-font);
+  font-weight:700;
+  font-size:26px; line-height:1.15;
+  letter-spacing:-0.01em;
+  color:var(--dcp-green);
+  margin-bottom:18px;
+  min-height:60px;
+}
+.cards-2up .work-card-stat {
+  font-size:30px; min-height:70px;
+}
+.work-card-media {
+  width:100%; aspect-ratio:16/9;
+  background:#000;
+  border:1px solid var(--dcp-violet-a20);
+  border-radius:4px;
+  overflow:hidden;
+  display:block;
+}
+.work-card-media video,
+.work-card-media img {
+  width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  display:block;
+}
+.media-placeholder {
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(84,93,255,0.08) 0,
+      rgba(84,93,255,0.08) 8px,
+      rgba(0,5,49,0.6) 8px,
+      rgba(0,5,49,0.6) 16px);
+  color:var(--dcp-text-mute);
+  font-size:11px; font-weight:600;
+  letter-spacing:0.22em; text-transform:uppercase;
+}
+
+/* ─────────────── S5: AUDIT SCORECARDS ─────────────── */
+.audit-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:18px;
+  flex:1;
+  min-height:0;
+  margin-bottom:18px;
+}
+.audit-shot {
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--dcp-violet-a20);
+  border-top:2px solid var(--dcp-green);
+  border-radius:6px;
+  overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  min-height:0;
+  animation:fade-up 0.6s ease both;
+}
+.audit-shot:nth-child(1) { animation-delay:0.04s; }
+.audit-shot:nth-child(2) { animation-delay:0.13s; }
+.audit-shot:nth-child(3) { animation-delay:0.22s; }
+.audit-shot:nth-child(4) { animation-delay:0.31s; }
+.audit-shot img {
+  width:100%; height:100%;
+  object-fit:contain;
+  object-position:center;
+  display:block;
+}
+.audit-bottomline {
+  font-family:var(--dcp-font);
+  font-size:13px; font-weight:500;
+  letter-spacing:0.04em;
+  color:var(--dcp-text-soft);
+}
+.audit-bottomline strong { color:var(--dcp-white); font-weight:600; }
+
+/* ─────────────── S6: BRAND GRAVITY (full-bleed lift) ─────────────── */
+#s6 { padding:0; }
+
+/* ─────────────── S7/S8: FRONTIER (bullet copy is the star) ─────────────── */
+.frontier-eyebrow {
+  font-family:var(--dcp-font);
+  font-size:11px; font-weight:600;
+  letter-spacing:0.32em; text-transform:uppercase;
+  color:var(--dcp-violet);
+  margin-bottom:18px;
+}
+.frontier-head {
+  font-size:clamp(34px,3.6vw,50px);
+  line-height:1.02;
+  margin-bottom:14px;
+  max-width:1100px;
+}
+.frontier-sub {
+  font-family:var(--dcp-font);
+  font-size:15px; font-weight:400;
+  line-height:1.5;
+  color:var(--dcp-text-soft);
+  max-width:880px;
+  margin-bottom:42px;
+}
+.frontier-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:64px;
+  flex:1;
+}
+.frontier-bullet {
+  display:flex; flex-direction:column; gap:22px;
+  animation:fade-up 0.7s ease both;
+}
+.frontier-bullet:nth-child(2) { animation-delay:0.15s; }
+.frontier-bullet-title {
+  font-family:var(--dcp-font);
+  font-weight:700;
+  font-size:clamp(28px,2.8vw,38px);
+  text-transform:uppercase;
+  letter-spacing:-0.01em;
+  line-height:1.1;
+  color:var(--dcp-white);
+}
+.frontier-bullet-list {
+  list-style:none; padding:0; margin:0;
+  display:flex; flex-direction:column; gap:14px;
+}
+.frontier-bullet-list li {
+  font-family:var(--dcp-font);
+  font-size:clamp(18px,1.7vw,24px);
+  font-weight:400;
+  line-height:1.4;
+  color:var(--dcp-white);
+  padding-left:22px;
+  position:relative;
+}
+.frontier-bullet-list li::before {
+  content:''; position:absolute;
+  left:0; top:0.62em;
+  width:12px; height:1.5px;
+  background:var(--dcp-violet);
+}
+.frontier-footer {
+  margin-top:42px;
+  padding-top:24px;
+  border-top:1px solid var(--dcp-green-a15);
+}
+.frontier-question, .frontier-bottomline {
+  font-family:var(--dcp-font);
+  font-weight:600;
+  font-size:20px;
+  line-height:1.4;
+  letter-spacing:-0.005em;
+  color:var(--dcp-green);
+  max-width:1100px;
+}
+.frontier-question::before {
+  content:'Q ';
+  font-family:var(--dcp-font);
+  font-weight:700;
+  letter-spacing:0.18em;
+  font-size:12px;
+  color:var(--dcp-green);
+  margin-right:10px;
+  vertical-align:3px;
+}
+
+/* ─────────────── S9: FRONTIER 3 (QUIET) ─────────────── */
+#s9 { justify-content:center; align-items:center; }
+.s9-wrap {
+  max-width:920px;
+  display:flex; flex-direction:column;
+  align-items:flex-start;
+  gap:32px;
+  position:relative;
+}
+.s9-head {
+  font-size:clamp(48px,5.4vw,76px);
+  line-height:0.97;
+  letter-spacing:-0.02em;
+  margin-top:6px;
+  margin-bottom:18px;
+}
+.s9-sub {
+  font-family:var(--dcp-font);
+  font-size:18px; font-weight:400;
+  line-height:1.55;
+  color:var(--dcp-text-soft);
+  max-width:780px;
+  margin-bottom:24px;
+}
+.s9-body {
+  display:flex; flex-direction:column; gap:24px;
+  max-width:780px;
+}
+.s9-body p {
+  font-family:var(--dcp-font);
+  font-size:22px; font-weight:400;
+  line-height:1.45;
+  color:var(--dcp-white);
+}
+.s9-bottomline {
+  font-family:var(--dcp-font);
+  font-weight:600;
+  font-size:18px; line-height:1.4;
+  color:var(--dcp-green);
+  margin-top:18px;
+  letter-spacing:-0.005em;
+}
+.s9-mark {
+  position:absolute;
+  bottom:-80px; left:0;
+  width:8px; height:8px;
+  border-radius:50%;
+  background:var(--dcp-green);
+  opacity:0.25;
+}
+
+/* ─────────────── S10: NEXT STEPS ─────────────── */
+#s10 { justify-content:center; }
+.s10-head {
+  font-family:var(--dcp-font);
+  font-weight:700;
+  font-size:clamp(96px,12vw,180px);
+  line-height:0.92;
+  letter-spacing:-0.035em;
+  text-transform:uppercase;
+  color:var(--dcp-white);
+}
+.s10-head em {
+  font-style:normal;
+  color:var(--dcp-green);
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="mark">DCP</span>
+    <span class="sep"></span>
+    <span>Goddard · AI Capabilities + Looking Ahead</span>
+  </div>
+  <div class="nav-right">
+    <div class="nav-dots" id="dots"></div>
+    <div class="nav-hint">← → to navigate</div>
+  </div>
+</nav>
+<div class="counter" id="ctr">1 / 11</div>
+
+<div class="deck">
+
+<!-- ═══ S0: TITLE ═══ -->
+<div class="slide" id="s0">
+  <div class="bg"></div>
+  <div class="glow" style="background:rgba(84,93,255,0.18);width:600px;height:600px;top:-150px;right:-100px;"></div>
+
+  <div class="s0-wrap">
+    <div class="s0-eyebrow">DCP × Goddard</div>
+    <div class="s0-rule"></div>
+    <h1 class="s0-headline">DCP AI Capabilities<br>+ Looking Ahead</h1>
+    <div class="s0-subline">May 7, 2026 · Prepared by DonerColle Partners.</div>
+  </div>
+</div>
+
+<!-- ═══ S1: AGENDA ═══ -->
+<div class="slide" id="s1">
+  <div class="bg"></div>
+  <div class="glow" style="background:rgba(32,254,143,0.05);width:600px;height:600px;top:-150px;right:-100px;"></div>
+
+  <div class="s1-wrap">
+    <h2 class="headline s1-head">Agenda</h2>
+
+    <div class="s1-grid">
+      <div class="s1-col">
+        <div class="s1-num">01</div>
+        <div class="s1-title">How We're Using AI</div>
+        <div class="s1-body">How our capabilities have evolved.</div>
+      </div>
+      <div class="s1-col">
+        <div class="s1-num">02</div>
+        <div class="s1-title">Our AI Roadmap</div>
+        <div class="s1-body">New services and what we're building.</div>
+      </div>
+      <div class="s1-col">
+        <div class="s1-num">03</div>
+        <div class="s1-title">Opportunities for Goddard</div>
+        <div class="s1-body">Three frontiers we think are interesting.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S2: EFFICIENCY ═══ -->
+<div class="slide" id="s2">
+  <div class="bg"></div>
+  <div class="glow" style="background:rgba(84,93,255,0.14);width:600px;height:600px;top:50%;left:-200px;transform:translateY(-50%);"></div>
+
+  <div class="deck-head-row">
+    <h2 class="headline deck-head">Efficiency</h2>
+    <div class="subhead deck-sub">Scale, speed, and table stakes.</div>
+  </div>
+
+  <div class="cards-3up">
+    <div class="work-card">
+      <div class="work-card-eyebrow">Stellantis</div>
+      <div class="work-card-stat">75% effort,<br>40% savings.</div>
+      <div class="work-card-media">
+        <video autoplay loop muted playsinline preload="auto">
+          <source src="videos/stellantis.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-eyebrow">Serta</div>
+      <div class="work-card-stat">End-to-end<br>campaign automation.</div>
+      <div class="work-card-media">
+        <video autoplay loop muted playsinline preload="auto">
+          <source src="videos/serta.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-eyebrow">Rush Street Gaming</div>
+      <div class="work-card-stat">6 hours<br>→ 15 minutes.</div>
+      <div class="work-card-media">
+        <video autoplay loop muted playsinline preload="auto">
+          <source src="videos/rsg-calendar.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S3: CREATIVITY ═══ -->
+<div class="slide" id="s3">
+  <div class="bg"></div>
+  <div class="glow" style="background:rgba(32,254,143,0.06);width:600px;height:600px;top:-100px;right:-150px;"></div>
+
+  <div class="deck-head-row">
+    <h2 class="headline deck-head">Creativity</h2>
+    <div class="subhead deck-sub">Using AI to produce the impossible (or at least improbable).</div>
+  </div>
+
+  <div class="cards-3up">
+    <div class="work-card">
+      <div class="work-card-eyebrow">123Net</div>
+      <div class="work-card-stat">AI-native<br>creative.</div>
+      <div class="work-card-media">
+        <video autoplay loop muted playsinline preload="auto">
+          <source src="videos/wifi_1920x1080.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-eyebrow">Ross-Simons</div>
+      <div class="work-card-stat">TV<br>production.</div>
+      <div class="work-card-media">
+        <video autoplay loop muted playsinline preload="auto">
+          <source src="videos/ross_simons.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-eyebrow">AllyDVM</div>
+      <div class="work-card-stat">Long-form with<br>consistent characters.</div>
+      <div class="work-card-media">
+        <!-- AllyDVM: 10-second cap, not a continuous loop. Handler in JS. -->
+        <video data-cap="10000" muted playsinline preload="auto">
+          <source src="videos/AllyDVM.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S4: BRAND ENCODING ═══ -->
+<div class="slide" id="s4">
+  <div class="bg"></div>
+  <div class="glow" style="background:rgba(84,93,255,0.12);width:700px;height:700px;top:50%;right:-200px;transform:translateY(-50%);"></div>
+
+  <div class="deck-head-row">
+    <h2 class="headline deck-head">Brand Encoding</h2>
+    <div class="subhead deck-sub">Building a central brand intelligence that powers everything else.</div>
+  </div>
+
+  <div class="cards-2up">
+    <div class="work-card">
+      <div class="work-card-eyebrow">Hamilton Beach</div>
+      <div class="work-card-stat">Strategic and<br>creative intent.</div>
+      <div class="work-card-media">
+        <img src="images/HB-Nucleus.png" alt="Hamilton Beach brand nucleus">
+      </div>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-eyebrow">Rush Street Gaming</div>
+      <div class="work-card-stat">Operations and<br>regulation.</div>
+      <div class="work-card-media">
+        <img src="images/RSG-Copilot.png" alt="Rush Street Gaming co-pilot">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S5: AEO / GEO ═══ -->
+<div class="slide" id="s5">
+  <div class="bg"></div>
+  <div class="glow" style="background:rgba(255,131,113,0.08);width:600px;height:600px;top:-100px;left:-150px;"></div>
+
+  <div class="deck-head-row">
+    <h2 class="headline deck-head">AEO / GEO</h2>
+    <div class="subhead deck-sub">Making brands legible to machines.</div>
+  </div>
+
+  <div class="audit-grid">
+    <div class="audit-shot"><img src="images/Scorecards/fairlife.png" alt="fairlife visibility audit scorecard"></div>
+    <div class="audit-shot"><img src="images/Scorecards/dove.png" alt="Dove visibility audit scorecard"></div>
+    <div class="audit-shot"><img src="images/Scorecards/jbl.png" alt="JBL visibility audit scorecard"></div>
+    <div class="audit-shot"><img src="images/Scorecards/gm.png" alt="General Motors visibility audit scorecard"></div>
+  </div>
+
+  <div class="audit-bottomline">
+    <strong>Four household brands. Tens of billions in market cap.</strong> All in the C range for machine-readability.
+  </div>
+</div>
+
+<!-- ═══ S6: BRAND GRAVITY (straight lift of Structure Ref slide 4, DCP color swap) ═══ -->
+<div class="slide fullbleed" id="s6">
+  <div class="bg"></div>
+  <div class="glow" style="background:rgba(32,254,143,0.11);width:500px;height:500px;top:50%;left:50%;transform:translate(-50%,-50%);position:absolute;"></div>
+
+  <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 1400 760" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="s6orb" cx="38%" cy="33%" r="65%">
+        <stop offset="0%"  stop-color="#20FE8F" stop-opacity="0.35"/>
+        <stop offset="45%" stop-color="#20FE8F" stop-opacity="0.12"/>
+        <stop offset="75%" stop-color="#20FE8F" stop-opacity="0.025"/>
+        <stop offset="100%" stop-color="#20FE8F" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="s6gf">
+        <feGaussianBlur stdDeviation="8" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- Outer orbit rings — Aurora Violet -->
+    <circle cx="700" cy="380" r="230" fill="none" stroke="#545DFF" stroke-opacity="0.18" stroke-width="1">
+      <animate attributeName="r" values="225;237;225" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="700" cy="380" r="200" fill="none" stroke="#545DFF" stroke-opacity="0.22" stroke-width="1">
+      <animate attributeName="r" values="198;210;198" dur="5s" begin="0.8s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- Left connector lines -->
+    <line x1="415" y1="277" x2="584" y2="277" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.32;0.12" dur="2.4s" repeatCount="indefinite"/></line>
+    <line x1="415" y1="314" x2="560" y2="314" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.32;0.12" dur="2.8s" begin="0.3s" repeatCount="indefinite"/></line>
+    <line x1="415" y1="351" x2="548" y2="351" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.32;0.12" dur="2.2s" begin="0.6s" repeatCount="indefinite"/></line>
+    <line x1="415" y1="388" x2="545" y2="388" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.32;0.12" dur="3s" begin="0.9s" repeatCount="indefinite"/></line>
+    <line x1="415" y1="425" x2="552" y2="425" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.32;0.12" dur="2.6s" begin="1.1s" repeatCount="indefinite"/></line>
+    <line x1="415" y1="462" x2="568" y2="462" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.32;0.12" dur="2.4s" begin="1.4s" repeatCount="indefinite"/></line>
+
+    <!-- Right connector lines -->
+    <line x1="808" y1="269" x2="1000" y2="269" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.3;0.12" dur="2.6s" begin="0.5s" repeatCount="indefinite"/></line>
+    <line x1="832" y1="299" x2="1000" y2="299" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.3;0.12" dur="2s" begin="0.2s" repeatCount="indefinite"/></line>
+    <line x1="846" y1="329" x2="1000" y2="329" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.3;0.12" dur="2.4s" begin="0.8s" repeatCount="indefinite"/></line>
+    <line x1="854" y1="359" x2="1000" y2="359" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.3;0.12" dur="2.2s" begin="0.4s" repeatCount="indefinite"/></line>
+    <line x1="855" y1="389" x2="1000" y2="389" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.3;0.12" dur="2.8s" begin="1.1s" repeatCount="indefinite"/></line>
+    <line x1="850" y1="419" x2="1000" y2="419" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.3;0.12" dur="2.6s" begin="0.6s" repeatCount="indefinite"/></line>
+    <line x1="839" y1="449" x2="1000" y2="449" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.3;0.12" dur="3s" begin="0.3s" repeatCount="indefinite"/></line>
+    <line x1="819" y1="479" x2="1000" y2="479" stroke="#20FE8F" stroke-opacity="0.22" stroke-width="1" stroke-dasharray="4 6"><animate attributeName="stroke-opacity" values="0.12;0.3;0.12" dur="2.4s" begin="0.9s" repeatCount="indefinite"/></line>
+
+    <!-- Inner orb -->
+    <circle cx="700" cy="380" r="155" fill="url(#s6orb)" stroke="#20FE8F" stroke-opacity="0.5" stroke-width="1.2" filter="url(#s6gf)">
+      <animate attributeName="stroke-opacity" values="0.38;0.62;0.38" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <text x="700" y="372" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="24" font-weight="700" fill="#20FE8F" letter-spacing="3">BRAND</text>
+    <text x="700" y="406" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="24" font-weight="700" fill="#20FE8F" letter-spacing="3">GRAVITY</text>
+
+    <!-- Left labels -->
+    <text x="390" y="228" text-anchor="end" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.55)" letter-spacing="2.5">WHAT THE BRAND KNOWS</text>
+    <text x="390" y="288" text-anchor="end" font-family="DM Sans,sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">BRAND STRATEGY</text>
+    <text x="390" y="325" text-anchor="end" font-family="DM Sans,sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">CORE CONCEPT</text>
+    <text x="390" y="362" text-anchor="end" font-family="DM Sans,sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">AUDIENCE PROFILES</text>
+    <text x="390" y="399" text-anchor="end" font-family="DM Sans,sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">DESIGN SYSTEMS</text>
+    <text x="390" y="436" text-anchor="end" font-family="DM Sans,sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">PROOF &amp; CONSTRAINTS</text>
+    <text x="390" y="473" text-anchor="end" font-family="DM Sans,sans-serif" font-size="24" font-weight="700" fill="#FFFFFF">BUSINESS INTELLIGENCE</text>
+    <text x="390" y="510" text-anchor="end" font-family="DM Sans,sans-serif" font-size="24" font-weight="700" fill="rgba(32,254,143,0.4)" letter-spacing="6">· · ·</text>
+
+    <!-- Right labels -->
+    <text x="1010" y="228" text-anchor="start" font-family="DM Sans,sans-serif" font-size="12" font-weight="600" fill="rgba(255,255,255,0.55)" letter-spacing="2.5">INTELLIGENCE → REAL-TIME WORK</text>
+    <text x="1010" y="278" text-anchor="start" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">BRIEFING</text>
+    <text x="1010" y="308" text-anchor="start" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">COPYWRITING &amp; VOICE</text>
+    <text x="1010" y="338" text-anchor="start" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">CONCEPTING</text>
+    <text x="1010" y="368" text-anchor="start" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">COHERENCE &amp; QA</text>
+    <text x="1010" y="398" text-anchor="start" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">MEDIA PLANNING</text>
+    <text x="1010" y="428" text-anchor="start" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">SOCIAL COHERENCE</text>
+    <text x="1010" y="458" text-anchor="start" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">GENERATIVE AI</text>
+    <text x="1010" y="488" text-anchor="start" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" fill="#FFFFFF">CONTENT &amp; COMMS</text>
+    <text x="1010" y="518" text-anchor="start" font-family="DM Sans,sans-serif" font-size="20" font-weight="700" fill="rgba(32,254,143,0.4)" letter-spacing="6">· · ·</text>
+  </svg>
+</div>
+
+<!-- ═══ S7: FRONTIER 01 ═══ -->
+<div class="slide" id="s7">
+  <div class="bg"></div>
+  <div class="glow" style="background:rgba(84,93,255,0.16);width:600px;height:600px;top:-100px;right:-150px;"></div>
+
+  <div class="frontier-eyebrow">Frontier 01</div>
+  <h2 class="headline frontier-head">Being recommendable<br>to machines.</h2>
+  <div class="frontier-sub">The most important conversations about a children's school are about to happen between a parent and a machine.</div>
+
+  <div class="frontier-grid">
+    <div class="frontier-bullet">
+      <div class="frontier-bullet-title">AI Rewards Patterns</div>
+      <ul class="frontier-bullet-list">
+        <li>Consistent POV</li>
+        <li>Structured knowledge</li>
+        <li>Coherent body of work</li>
+      </ul>
+    </div>
+
+    <div class="frontier-bullet">
+      <div class="frontier-bullet-title">Goddard Developmental Guidelines</div>
+      <ul class="frontier-bullet-list">
+        <li>Re-architected as machine-legible</li>
+        <li>Latent strategic asset</li>
+        <li>Competitive advantage</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="frontier-footer">
+    <div class="frontier-question">How do you currently think about Goddard's surface area to AI assistants?</div>
+  </div>
+</div>
+
+<!-- ═══ S8: FRONTIER 02 ═══ -->
+<div class="slide" id="s8">
+  <div class="bg"></div>
+  <div class="glow" style="background:rgba(32,254,143,0.06);width:600px;height:600px;top:50%;left:-200px;transform:translateY(-50%);"></div>
+
+  <div class="frontier-eyebrow">Frontier 02</div>
+  <h2 class="headline frontier-head">Meeting the parent<br>inside the agent.</h2>
+  <div class="frontier-sub">Goddard can meet prospects with a lower-friction, consistent experience.</div>
+
+  <div class="frontier-grid">
+    <div class="frontier-bullet">
+      <div class="frontier-bullet-title">Accessing the Information</div>
+      <ul class="frontier-bullet-list">
+        <li>Aggregated knowledge across all locations</li>
+        <li>One source of truth for AI assistants</li>
+        <li>Franchises still manage their own content</li>
+      </ul>
+    </div>
+
+    <div class="frontier-bullet">
+      <div class="frontier-bullet-title">0-Friction Action</div>
+      <ul class="frontier-bullet-list">
+        <li>Tour availability &amp; booking</li>
+        <li>Control initial brand experience</li>
+        <li>Create personalized experience</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="frontier-footer">
+    <div class="frontier-bottomline">The first early-childhood brand to build this becomes the default; the rest become invisible.</div>
+  </div>
+</div>
+
+<!-- ═══ S9: FRONTIER 03 — QUIET ═══ -->
+<div class="slide" id="s9">
+  <div class="bg"></div>
+
+  <div class="s9-wrap">
+    <div class="frontier-eyebrow" style="margin-bottom:0;">Frontier 03</div>
+    <h2 class="headline s9-head" style="margin-top:0;">The curriculum itself.</h2>
+    <div class="s9-sub">Not screens for toddlers. The opposite. AI that augments the teacher.</div>
+
+    <div class="s9-body">
+      <p>The agent in the educator's pocket — not the child's.</p>
+      <p>Planning, documentation, parent communication: handled.</p>
+      <p>What's left in the room is a teacher and a child and a block tower and a question.</p>
+    </div>
+
+    <div class="s9-bottomline">What does Goddard want to be true about a teacher's day three years from now?</div>
+
+    <div class="s9-mark"></div>
+  </div>
+</div>
+
+<!-- ═══ S10: NEXT STEPS ═══ -->
+<div class="slide" id="s10">
+  <div class="bg"></div>
+  <div class="glow" style="background:rgba(32,254,143,0.04);width:480px;height:480px;bottom:-100px;right:-100px;"></div>
+
+  <h2 class="s10-head">Next steps<em>.</em></h2>
+</div>
+
+</div><!-- end deck -->
+
+<script>
+const TOTAL = 11;
+let cur = 0;
+const slides = [];
+const dotEls = [];
+
+function init() {
+  for (let i = 0; i < TOTAL; i++) slides.push(document.getElementById('s' + i));
+  const dc = document.getElementById('dots');
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.addEventListener('click', () => go(i));
+    dc.appendChild(d);
+    dotEls.push(d);
+  }
+  go(0);
+  kickVideos();
+}
+
+function go(n) {
+  if (n < 0 || n >= TOTAL) return;
+  if (slides[cur]) slides[cur].classList.remove('on');
+  if (dotEls[cur]) dotEls[cur].classList.remove('on');
+  cur = n;
+  slides[cur].classList.add('on');
+  dotEls[cur].classList.add('on');
+  document.getElementById('ctr').textContent = (cur + 1) + ' / ' + TOTAL;
+
+  // Per-slide video handling
+  slides[cur].querySelectorAll('video').forEach(v => {
+    if (v.dataset.cap) {
+      const ms = parseInt(v.dataset.cap, 10);
+      try { v.pause(); v.currentTime = 0; v.play(); } catch(e){}
+      setTimeout(() => { try { v.pause(); } catch(e){} }, ms);
+    } else {
+      try { v.play(); } catch(e){}
+    }
+  });
+
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); go(cur - 1); }
+  else if (e.key === 'Home') go(0);
+  else if (e.key === 'End') go(TOTAL - 1);
+});
+
+let tx = 0;
+document.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; });
+document.addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) go(cur + (dx < 0 ? 1 : -1));
+});
+
+function kickVideos() {
+  document.querySelectorAll('video').forEach(v => {
+    v.muted = true;
+    if (v.dataset.cap) return; // capped videos are gated to slide entry
+    const p = v.play();
+    if (p && p.catch) p.catch(() => {});
+  });
+}
+window.addEventListener('load', kickVideos);
+['click', 'keydown', 'touchstart', 'pointerdown'].forEach(ev => {
+  document.addEventListener(ev, kickVideos);
+});
+
+init();
+</script>
+
+</body>
+</html>
