@@ -437,8 +437,37 @@ html, body {
   vertical-align:3px;
 }
 
-/* ─────────────── S9: FRONTIER 3 (QUIET) ─────────────── */
-#s9 { justify-content:center; align-items:center; }
+/* ─────────────── Frontier image layout (S7–S9) ─────────────── */
+.frontier-layout {
+  display:flex;
+  gap:48px;
+  flex:1;
+  min-height:0;
+}
+.frontier-content {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+}
+.frontier-content .frontier-grid { gap:40px; }
+.frontier-image {
+  flex:0 0 36%;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--dcp-violet-a20);
+  border-top:2px solid var(--dcp-green);
+  border-radius:6px;
+  overflow:hidden;
+  animation:fade-up 0.6s ease 0.35s both;
+  min-height:0;
+}
+.frontier-image img {
+  width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  display:block;
+}
+
+/* ─────────────── S9: FRONTIER 3 ─────────────── */
 .s9-wrap {
   max-width:920px;
   display:flex; flex-direction:column;
@@ -786,23 +815,30 @@ html, body {
   <h2 class="headline frontier-head">Being recommendable<br>to machines.</h2>
   <div class="frontier-sub">The most important conversations about a children's school are about to happen between a parent and a machine.</div>
 
-  <div class="frontier-grid">
-    <div class="frontier-bullet">
-      <div class="frontier-bullet-title">AI Rewards Patterns</div>
-      <ul class="frontier-bullet-list">
-        <li>Consistent POV</li>
-        <li>Structured knowledge</li>
-        <li>Coherent body of work</li>
-      </ul>
-    </div>
+  <div class="frontier-layout">
+    <div class="frontier-content">
+      <div class="frontier-grid">
+        <div class="frontier-bullet">
+          <div class="frontier-bullet-title">AI Rewards Patterns</div>
+          <ul class="frontier-bullet-list">
+            <li>Consistent POV</li>
+            <li>Structured knowledge</li>
+            <li>Coherent body of work</li>
+          </ul>
+        </div>
 
-    <div class="frontier-bullet">
-      <div class="frontier-bullet-title">Goddard Developmental Guidelines</div>
-      <ul class="frontier-bullet-list">
-        <li>Re-architected as machine-legible</li>
-        <li>Latent strategic asset</li>
-        <li>Competitive advantage</li>
-      </ul>
+        <div class="frontier-bullet">
+          <div class="frontier-bullet-title">Goddard Developmental Guidelines</div>
+          <ul class="frontier-bullet-list">
+            <li>Re-architected as machine-legible</li>
+            <li>Latent strategic asset</li>
+            <li>Competitive advantage</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="frontier-image">
+      <img src="images/Claude.png" alt="Claude AI">
     </div>
   </div>
 
@@ -820,23 +856,30 @@ html, body {
   <h2 class="headline frontier-head">Meeting the parent<br>inside the agent.</h2>
   <div class="frontier-sub">Goddard can meet prospects with a lower-friction, consistent experience.</div>
 
-  <div class="frontier-grid">
-    <div class="frontier-bullet">
-      <div class="frontier-bullet-title">Accessing the Information</div>
-      <ul class="frontier-bullet-list">
-        <li>Aggregated knowledge across all locations</li>
-        <li>One source of truth for AI assistants</li>
-        <li>Franchises still manage their own content</li>
-      </ul>
-    </div>
+  <div class="frontier-layout">
+    <div class="frontier-content">
+      <div class="frontier-grid">
+        <div class="frontier-bullet">
+          <div class="frontier-bullet-title">Accessing the Information</div>
+          <ul class="frontier-bullet-list">
+            <li>Aggregated knowledge across all locations</li>
+            <li>One source of truth for AI assistants</li>
+            <li>Franchises still manage their own content</li>
+          </ul>
+        </div>
 
-    <div class="frontier-bullet">
-      <div class="frontier-bullet-title">0-Friction Action</div>
-      <ul class="frontier-bullet-list">
-        <li>Tour availability &amp; booking</li>
-        <li>Control initial brand experience</li>
-        <li>Create personalized experience</li>
-      </ul>
+        <div class="frontier-bullet">
+          <div class="frontier-bullet-title">0-Friction Action</div>
+          <ul class="frontier-bullet-list">
+            <li>Tour availability &amp; booking</li>
+            <li>Control initial brand experience</li>
+            <li>Create personalized experience</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="frontier-image">
+      <img src="images/School Shot.png" alt="Goddard school">
     </div>
   </div>
 
@@ -845,24 +888,44 @@ html, body {
   </div>
 </div>
 
-<!-- ═══ S9: FRONTIER 03 — QUIET ═══ -->
+<!-- ═══ S9: FRONTIER 03 ═══ -->
 <div class="slide" id="s9">
   <div class="bg"></div>
+  <div class="glow" style="background:rgba(84,93,255,0.16);width:600px;height:600px;top:-100px;right:-150px;"></div>
 
-  <div class="s9-wrap">
-    <div class="frontier-eyebrow" style="margin-bottom:0;">Frontier 03</div>
-    <h2 class="headline s9-head" style="margin-top:0;">The curriculum itself.</h2>
-    <div class="s9-sub">Not screens for toddlers. The opposite. AI that augments the teacher.</div>
+  <div class="frontier-eyebrow">Frontier 03</div>
+  <h2 class="headline frontier-head">The curriculum itself.</h2>
+  <div class="frontier-sub">Not screens for toddlers. The opposite. AI that augments the teacher.</div>
 
-    <div class="s9-body">
-      <p>The agent in the educator's pocket — not the child's.</p>
-      <p>Planning, documentation, parent communication: handled.</p>
-      <p>What's left in the room is a teacher and a child and a block tower and a question.</p>
+  <div class="frontier-layout">
+    <div class="frontier-content">
+      <div class="frontier-grid">
+        <div class="frontier-bullet">
+          <div class="frontier-bullet-title">What AI Handles</div>
+          <ul class="frontier-bullet-list">
+            <li>Planning and documentation</li>
+            <li>Parent communication</li>
+            <li>In the educator's pocket — not the child's</li>
+          </ul>
+        </div>
+
+        <div class="frontier-bullet">
+          <div class="frontier-bullet-title">What Remains</div>
+          <ul class="frontier-bullet-list">
+            <li>Teacher and child — undistracted</li>
+            <li>A block tower and a question</li>
+            <li>The irreplaceable human moment</li>
+          </ul>
+        </div>
+      </div>
     </div>
+    <div class="frontier-image">
+      <img src="images/Curriculum.png" alt="Goddard curriculum">
+    </div>
+  </div>
 
-    <div class="s9-bottomline">What does Goddard want to be true about a teacher's day three years from now?</div>
-
-    <div class="s9-mark"></div>
+  <div class="frontier-footer">
+    <div class="frontier-question">What does Goddard want to be true about a teacher's day three years from now?</div>
   </div>
 </div>
 
